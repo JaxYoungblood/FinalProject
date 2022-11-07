@@ -30,19 +30,21 @@ public class EmployeeController {
     this.service = service;
   }
 
-
-  @GetMapping(value = "{id}") // READ
-  public Employee get(@PathVariable String id) {
-    Employee employee = service.getEmployee(id);
+  
+  //READ
+  @GetMapping(value = "{employee_ID}") 
+  public Employee get(@PathVariable String employee_ID) {
+    Employee employee = service.getEmployee(employee_ID);
     if (employee != null) {
       return employee;
     } // end IF
     throw new ResponseStatusException(HttpStatus.NOT_FOUND,
         "Sorry, the requested employee was not found. Please try again!");
-  }// end Employee GET
+  }// end Employee READ
 
-
-  @PostMapping(value = "{input}") // CREATE
+  
+  //CREATE
+  @PostMapping(value = "{input}") 
   public Employee create(@Valid @RequestBody InputEmployee input) {
     if (input != null) {
       if (!input.isValid()) {
@@ -61,7 +63,8 @@ public class EmployeeController {
   }// end Employee CREATE
 
 
-  @PutMapping // UPDATE
+  //UPDATE
+  @PutMapping 
   public Employee update(@RequestBody InputEmployee input) {
     if (input != null) {
       if (!input.isValid()) {
@@ -80,12 +83,13 @@ public class EmployeeController {
   }// end Employee UPDATE
 
 
-  @DeleteMapping(value = "{id}") // DELETE
-  public Employee delete(@PathVariable String id) {
-    if ((id != null) && (!id.isEmpty())) {
-      Employee existing = service.getEmployee(id);
+  //DELETE
+  @DeleteMapping(value = "{employee_ID}") 
+  public Employee delete(@PathVariable String employee_ID) {
+    if ((employee_ID != null) && (!employee_ID.isEmpty())) {
+      Employee existing = service.getEmployee(employee_ID);
       if (existing != null) {
-        return service.deleteEmployee(id);
+        return service.deleteEmployee(employee_ID);
       } // end IF 2
       throw new ResponseStatusException(HttpStatus.NOT_FOUND,
           "Sorry, the requested employee was not found. Please try again!");

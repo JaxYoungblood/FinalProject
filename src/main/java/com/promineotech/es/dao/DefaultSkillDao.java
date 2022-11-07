@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import com.promineotech.es.entity.Skill;
 
+
 @Repository
 public class DefaultSkillDao implements SkillDao {
   private NamedParameterJdbcTemplate provider;
@@ -18,15 +19,17 @@ public class DefaultSkillDao implements SkillDao {
 
 
   public Optional<Skill> get(String skill_ID) {
-    String sql = "SELECT skill_ID, description " 
+    String sql = 
+        "SELECT skill_ID, description " 
         + "From skill "
         + "WHERE skill_ID = :skill_ID";
     MapSqlParameterSource parameters = new MapSqlParameterSource();
     parameters.addValue("skill_ID", skill_ID);
 
     List<Skill> skill = provider.query(sql, parameters, (rs, rowNum) -> {
-      return new Skill(rs.getString("skill_ID"), 
-          rs.getString("description");
+      return new Skill(
+          rs.getString("skill_ID"), 
+          rs.getString("description"));
       });
     if (skill.isEmpty()) {
       return Optional.empty();
@@ -42,8 +45,10 @@ public class DefaultSkillDao implements SkillDao {
 
     Optional<Skill> existing = get(skill_ID);
     if (existing.isPresent()) {
-      // is this SQL correct??
-      String sql = "DELETE employee_skill.*, skill.* " + "FROM employee_skill, skill "
+// is this SQL correct??
+      String sql = 
+          "DELETE employee_skill.*, skill.* " 
+          + "FROM employee_skill, skill "
           + "WHERE employee_skill.skill_ID = :skill_ID AND skill.skill_ID = :skill_ID;";
 
       MapSqlParameterSource parameters = new MapSqlParameterSource();

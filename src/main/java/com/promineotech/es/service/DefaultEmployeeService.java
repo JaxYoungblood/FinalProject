@@ -17,11 +17,11 @@ public class DefaultEmployeeService implements EmployeeService {
 
 
   // @Override (Error occurred below requesting me to remove OVERRIDE)
-  public Employee getEmployee(String id) {
-    if ((id == null) || (id.isEmpty())) {
+  public Employee getEmployee(String employee_ID) {
+    if ((employee_ID == null) || (employee_ID.isEmpty())) {
       return null;
     } // end IF 1
-    Optional<Employee> employee = repository.get(id);
+    Optional<Employee> employee = repository.get(employee_ID);
     if (employee.isEmpty()) {
       return null;
     } // end IF 2
@@ -54,11 +54,11 @@ public class DefaultEmployeeService implements EmployeeService {
 
 
   // @Override (Error occurred below requesting me to remove OVERRIDE)
-  public Employee deleteEmployee(String id) {
-    if ((id == null) || (id.isEmpty())) {
+  public Employee deleteEmployee(String employee_ID) {
+    if ((employee_ID == null) || (employee_ID.isEmpty())) {
       return null;
     } // end IF 1
-    Optional<Employee> deleted = repository.delete(id);
+    Optional<Employee> deleted = repository.delete(employee_ID);
     if (deleted.isPresent()) {
       return deleted.get();
     } // end IF 2

@@ -17,13 +17,18 @@ public class DefaultEmployeeSkillDao implements EmployeeSkillDao {
 
 
   public Optional<EmployeeSkill> get(String employee, String skill) {
-    String sql = "SELECT employee_ID, skill_ID " + "FROM employee_skill "
-        + "WHERE employee_ID = :employee_ID;";
-    MapSqlParameterSource parameters = new MapSqlParameterSource();
+    //@formatter:off
+    String sql = "SELECT employee_ID, skill_ID " 
+               + "FROM employee_skill "
+               + "WHERE employee_ID = :employee_ID;";
+    //@formatter:on
+ MapSqlParameterSource parameters = new MapSqlParameterSource();
     parameters.addValue("employee_ID", employee);
 
     List<EmployeeSkill> employeeSkill = provider.query(sql, parameters, (rs, rowNum) -> {
-      return new EmployeeSkill(rs.getString("employee_ID"), rs.getString("skill_ID"));
+      return new EmployeeSkill(
+          rs.getString("employee_ID"), 
+          rs.getString("skill_ID"));
     });
     if (employeeSkill.isEmpty()) {
       return Optional.empty();

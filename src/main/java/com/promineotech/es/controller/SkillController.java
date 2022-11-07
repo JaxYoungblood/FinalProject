@@ -1,6 +1,7 @@
 package com.promineotech.es.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +26,8 @@ public class SkillController {
     this.service = service;
   }
 
-  @GetMapping(value = "{skill_ID}") // READ
+  //READ
+  @GetMapping(value = "{skill_ID}") 
   public Skill get(@PathVariable String skill_ID) {
     Skill skill = service.getSkill(skill_ID);
     if (skill != null) {
@@ -36,7 +38,8 @@ public class SkillController {
   }// end Skill READ
 
 
-  @DeleteMapping(value = "{skill_ID}") // DELETE
+  //DELETE
+  @DeleteMapping(value = "{skill_ID}") 
   public Skill delete(@PathVariable String skill_ID) {
     if ((skill_ID != null) && (!skill_ID.isEmpty())) {
       Skill existing = service.deleteSkill(skill_ID);

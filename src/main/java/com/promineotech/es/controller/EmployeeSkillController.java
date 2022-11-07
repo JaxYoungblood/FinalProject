@@ -16,6 +16,8 @@ import io.swagger.v3.oas.annotations.servers.Server;
 @OpenAPIDefinition(info = @Info(title = "Employee Skills"),
     servers = {@Server(url = "http://localhost:8080", description = "Local server.")})
 @RequestMapping("/employee_skill")
+
+
 public class EmployeeSkillController {
   private EmployeeSkillService service;
 
@@ -23,7 +25,9 @@ public class EmployeeSkillController {
     this.service = service;
   }
 
-  @GetMapping(value = "{order}") // READ
+  
+  //READ
+  @GetMapping(value = "{employee_skill}") 
   public EmployeeSkill get(@PathVariable String employee, String skill) {
     EmployeeSkill employeeSkill = service.getEmployeeSkill(employee, skill);
     if (employeeSkill != null) {

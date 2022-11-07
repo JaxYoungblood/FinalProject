@@ -4,10 +4,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class InputEmployee {
 
+  private String departmentID;
   private String firstName;
   private String lastName;
   private String phoneNumber;
 
+  public String getDepartmentID() {
+    return departmentID;
+  }
+
+  public InputEmployee setDepartmentID(String departmentID) {
+    this.departmentID = departmentID;
+    return this;
+  }
+  
   public String getFirstName() {
     return firstName;
   }
@@ -37,10 +47,13 @@ public class InputEmployee {
 
   @JsonIgnore
   public boolean isValid() {
-    return (getFirstName() != null) && (!getFirstName().isEmpty()) && (getLastName() != null)
-        && (!getLastName().isEmpty()) && (getPhoneNumber() != null)
-        && (!getPhoneNumber().isEmpty());
-  }// end BOOLEAN
+    //@formatter:off
+    return (getDepartmentID() != null) && (!getDepartmentID().isEmpty()) 
+        && (getFirstName() != null) && (!getFirstName().isEmpty()) 
+        && (getLastName() != null) && (!getLastName().isEmpty()) 
+        && (getPhoneNumber() != null) && (!getPhoneNumber().isEmpty());
+    //@formatter:on
+ }// end BOOLEAN
 
 
 }// end CLASS

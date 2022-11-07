@@ -5,12 +5,12 @@ import com.promineotech.es.entity.InputEmployee;
 
 
 public interface EmployeeService {
-  Employee getEmployee(String id);
+  Employee getEmployee(String employee_ID);
 
   Employee createEmployee(InputEmployee input);
 
   Employee updateEmployee(InputEmployee input);
 
-  Employee deleteEmployee(String id);
+  Employee deleteEmployee(String employee_ID);
 
 }// end CLASS

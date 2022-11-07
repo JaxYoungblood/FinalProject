@@ -25,8 +25,11 @@ public class DefaultDepartmentDao implements DepartmentDao {
     parameters.addValue("department_ID", department_ID);
 
     List<Department> department = provider.query(sql, parameters, (rs, rowNum) -> {
-      return new Department(rs.getString("department_ID"), 
+      return new Department(
+          //@formatter:off
+          rs.getString("department_ID"), 
           rs.getString("description");
+          //@formatter:on
       });
     if (department.isEmpty()) {
       return Optional.empty();
@@ -42,7 +45,7 @@ public class DefaultDepartmentDao implements DepartmentDao {
 
     Optional<Department> existing = get(department_ID);
     if (existing.isPresent()) {
-      // is this SQL correct??
+// is this SQL correct??
       String sql = "DELETE employee.*, department.* " + "FROM employee, department "
           + "WHERE employee.department_ID = :department_ID AND department.department_ID = :department_ID;";
 

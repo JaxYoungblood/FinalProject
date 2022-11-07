@@ -16,19 +16,22 @@ public class DefaultEmployeeDao implements EmployeeDao {
     this.provider = provider;
   }
 
-  // @Override (Error occurred below requesting me to remove OVERRIDE)
-  public Optional<Employee> get(String id) {
-    // @Formatter:off
-    String sql = "SELECT employee_ID, first_name, last_name, phone " + "FROM employee "
+
+  public Optional<Employee> get(String employee_ID) {
+    String sql = "SELECT employee_ID, department_ID, first_name, last_name, phone " 
+        + "FROM employee "
         + "WHERE employee_ID = :employee_ID;";
-    // @Formatter:on
     MapSqlParameterSource parameters = new MapSqlParameterSource();
-    parameters.addValue("employee_ID", id);
+    parameters.addValue("employee_ID", employee_ID);
 
     List<Employee> employee = provider.query(sql, parameters, (rs, rowNum) -> {
       // @Formatter:off
-      return new Employee(rs.getString("employee_ID"), rs.getString("first_name"),
-          rs.getString("last_name"), rs.getString("phone"));
+      return new Employee(
+          rs.getString("employee_ID"), 
+          rs.getString("department_ID"), 
+          rs.getString("first_name"),
+          rs.getString("last_name"), 
+          rs.getString("phone"));
     });// @Formatter:on
     if (employee.isEmpty()) {
       return Optional.empty();
@@ -37,22 +40,22 @@ public class DefaultEmployeeDao implements EmployeeDao {
   }// end GET
 
 
-  // @Override (Error occurred below requesting me to remove OVERRIDE)
   public Optional<Employee> create(InputEmployee input) {
     if ((input == null) || (!input.isValid())) {
       return Optional.empty();
     } // end IF
-      // @Formatter:off
     String sql = "INSERT INTO customers (customer_pk, first_name, last_name, phone) "
         + "Values (:customer_pk, :first_name, :last_name, :phone);";
-    // @Formatter:off
 
     MapSqlParameterSource parameters = new MapSqlParameterSource();
+    String department_ID = input.getDepartmentID();
     String first_name = input.getFirstName();
     String last_name = input.getLastName();
     String phone = input.getPhoneNumber();
+//How do I get just first name initial??
     String employee_ID = last_name + "_" + first_name;
     parameters.addValue("employee_ID", employee_ID);
+    parameters.addValue("department_ID", department_ID);
     parameters.addValue("first_name", first_name);
     parameters.addValue("last_name", last_name);
     parameters.addValue("phone", phone);
@@ -73,12 +76,14 @@ public class DefaultEmployeeDao implements EmployeeDao {
     String sql = "UPDATE employee SET phone = :phone WHERE employee_ID = :employee_ID; ";
 
     MapSqlParameterSource parameters = new MapSqlParameterSource();
+    String department_ID = input.getDepartmentID();
     String first_name = input.getFirstName();
     String last_name = input.getLastName();
     String phone = input.getPhoneNumber();
     String employee_ID = last_name + "_" + first_name;
     parameters.addValue("phone", phone);
     parameters.addValue("employee_ID", employee_ID);
+    parameters.addValue("department_ID", department_ID);
     parameters.addValue("first_name", first_name);
     parameters.addValue("last_name", last_name);
 
@@ -91,16 +96,17 @@ public class DefaultEmployeeDao implements EmployeeDao {
 
 
   // @Override (Error occurred below requesting me to remove OVERRIDE)
-  public Optional<Employee> delete(String id) {
-    if ((id == null) || (id.isEmpty())) {
+  public Optional<Employee> delete(String employee_ID) {
+    if ((employee_ID == null) || (employee_ID.isEmpty())) {
       return Optional.empty();
     } // end IF
 
-    Optional<Employee> existing = get(id);
+    Optional<Employee> existing = get(employee_ID);
     if (existing.isPresent()) {
-      String sql = "DELETE FROM employee WHERE employee_ID = :employee_ID";
+      String sql = 
+          "DELETE FROM employee WHERE employee_ID = :employee_ID";
       MapSqlParameterSource parameters = new MapSqlParameterSource();
-      parameters.addValue("employee_ID", id);
+      parameters.addValue("employee_ID", employee_ID);
 
       int rows = provider.update(sql, parameters);
       if (rows > 0) {

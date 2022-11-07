@@ -25,7 +25,8 @@ public class DepartmentController {
     this.service = service;
   }
 
-  @GetMapping(value = "{department_ID}") // READ
+  //READ
+  @GetMapping(value = "{department_ID}") 
   public Department get(@PathVariable String department_ID) {
     Department department = service.getDepartment(department_ID);
     if (department != null) {
@@ -36,7 +37,8 @@ public class DepartmentController {
   }// end Skill READ
 
 
-  @DeleteMapping(value = "{department_ID}") // DELETE
+  //DELETE
+  @DeleteMapping(value = "{department_ID}") 
   public Department delete(@PathVariable String department_ID) {
     if ((department_ID != null) && (!department_ID.isEmpty())) {
       Department existing = service.deleteDepartment(department_ID);
