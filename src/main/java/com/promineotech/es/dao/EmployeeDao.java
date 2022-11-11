@@ -1,16 +1,17 @@
 package com.promineotech.es.dao;
 
-import java.util.Optional;
+import java.util.List;
+//import java.util.Optional;
 import com.promineotech.es.entity.Employee;
 import com.promineotech.es.entity.InputEmployee;
 
 public interface EmployeeDao {
-  Optional<Employee> get(String employee_ID);
+  List<Employee> get(String employee_ID);
 
-  Optional<Employee> create(InputEmployee input);
+  List<Employee> create(InputEmployee input);
 
-  Optional<Employee> update(InputEmployee input);
+  List<Employee> update(InputEmployee input);
 
-  Optional<Employee> delete(String employee_ID);
+  List<Employee> delete(String employee_ID);
 
 }// end INTERFACE

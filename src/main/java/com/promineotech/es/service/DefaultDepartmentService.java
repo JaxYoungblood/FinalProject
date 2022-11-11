@@ -1,5 +1,6 @@
 package com.promineotech.es.service;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import com.promineotech.es.dao.DepartmentDao;
@@ -7,22 +8,18 @@ import com.promineotech.es.entity.Department;
 
 @Service
 public class DefaultDepartmentService implements DepartmentService {
-  private DepartmentDao repository;
-
-  public DefaultDepartmentService(DepartmentDao repository) {
-    this.repository = repository;
-  }
+  private DepartmentDao departmentDao;
 
 
   public Department getDepartment(String department_ID) {
     if ((department_ID == null) || (department_ID.isEmpty())) {
       return null;
     } // end IF 1
-    Optional<Department> Department = repository.get(department_ID);
+    List<Department> Department = departmentDao.get(department_ID);
     if (Department.isEmpty()) {
       return null;
     } // end IF 2
-    return Department.get();
+    return Department.get(0);
   }// end GET
 
 
@@ -30,9 +27,9 @@ public class DefaultDepartmentService implements DepartmentService {
     if ((department_ID == null) || (department_ID.isEmpty())) {
       return null;
     } // end IF 1
-    Optional<Department> deleted = repository.delete(department_ID);
+    List<Department> deleted = departmentDao.delete(department_ID);
     if (deleted.isPresent()) {
-      return deleted.get();
+      return deleted.get(0);
     } // end IF 2
     return null;
   }// end DELETE
