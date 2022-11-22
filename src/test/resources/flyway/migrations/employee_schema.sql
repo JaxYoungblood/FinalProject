@@ -21,7 +21,7 @@ FOREIGN KEY (department_ID) REFERENCES department (department_ID)
 
 CREATE TABLE skill (
 skill_ID INT NOT NULL AUTO_INCREMENT,
-description varchar (100) not null,
+description VARCHAR (100) not null,
 PRIMARY KEY(skill_ID)
 );
 

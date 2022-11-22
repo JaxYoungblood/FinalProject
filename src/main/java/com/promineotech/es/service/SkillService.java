@@ -1,11 +1,13 @@
 package com.promineotech.es.service;
 
+import java.util.List;
+import java.util.Optional;
 import com.promineotech.es.entity.Skill;
 
 public interface SkillService {
 
-  Skill getSkill(String skill_ID);
+  List<Skill> getSkill(int skillId);
 
-  Skill deleteSkill(String skill_ID);
+  Optional<Skill> deleteSkill(int skillId);
 
 }

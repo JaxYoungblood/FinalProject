@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class Skill {
-  private int skill_ID;
+  
+  private int skillId;
   private String description;
 }

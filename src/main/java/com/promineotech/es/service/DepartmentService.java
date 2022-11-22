@@ -1,11 +1,13 @@
 package com.promineotech.es.service;
 
+import java.util.List;
+import java.util.Optional;
 import com.promineotech.es.entity.Department;
 
 public interface DepartmentService {
 
-  Department getDepartment(String department_ID);
+  List<Department> getDepartment(String departmentId);
 
-  Department deleteDepartment(String department_ID);
+  Optional<Department> deleteDepartment(String departmentId);
 
 }

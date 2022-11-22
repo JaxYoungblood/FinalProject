@@ -1,55 +1,118 @@
 package com.promineotech.es.controller;
 
+import java.util.List;
+import java.util.Optional;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import com.promineotech.es.entity.Department;
-import com.promineotech.es.service.DepartmentService;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.Parameter;
 
-@RestController
+
+@Validated
 @OpenAPIDefinition(info = @Info(title = "Employee Skills"),
-    servers = {@Server(url = "http://localhost:8080", description = "Local server.")})
+servers = {@Server(url = "http://localhost:8080", description = "Local server.")})
 @RequestMapping("/department")
 
-public class DepartmentController {
-  private DepartmentService service;
 
-  public DepartmentController(DepartmentService service) {
-    this.service = service;
-  }
-
+public interface DepartmentController {
+//@formatter:off
+  
+  
   //READ
-  @GetMapping(value = "{department_ID}") 
-  public Department get(@PathVariable String department_ID) {
-    Department department = service.getDepartment(department_ID);
-    if (department != null) {
-      return department;
-    } // end IF
-    throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-        "Sorry, the requested department was not found. Please try again!");
-  }// end Skill READ
+  @Operation(
+      summary = "Returns a list of departments",
+      description = "Returns a list of departments given a required department id",
+      responses = {
+          @ApiResponse(
+              responseCode = "200", 
+              description = "A list of departments is returned.", 
+              content = @Content(
+                  mediaType = "application/json", 
+              schema = @Schema(implementation = Department.class))),
+          @ApiResponse(
+              responseCode = "400", 
+              description = "The request parameters are invalid.", 
+              content = @Content(
+                  mediaType = "application/json")),
+          @ApiResponse(
+              responseCode = "404", 
+              description = "No departments were found with the input criteria.", 
+              content = @Content(
+                  mediaType = "application/json")),
+          @ApiResponse(
+              responseCode = "500", 
+              description = "An unplanned error occurred.", 
+              content = @Content(
+                  mediaType = "application/json"))
+      },
+      parameters = {
+          @Parameter(
+              name = "departmentId",
+              allowEmptyValue = false,
+              required = false,
+              description = "The department ID (i.e., 'HR')") 
+     }
+  )
+  @GetMapping
+  @ResponseStatus(code = HttpStatus.OK)
+  List<Department> getDepartment( 
+      @RequestParam(required = false)
+      String departmentId);
 
-
-  //DELETE
-  @DeleteMapping(value = "{department_ID}") 
-  public Department delete(@PathVariable String department_ID) {
-    if ((department_ID != null) && (!department_ID.isEmpty())) {
-      Department existing = service.deleteDepartment(department_ID);
-      if (existing != null) {
-        return service.deleteDepartment(department_ID);
-      } // end IF 2
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-          "Sorry, the requested department was not found. Please try again!");
-    } // end IF 1
-    throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-        "Sorry, the input was empty or invalid. Please try again!");
-  }// end Skill DELETE
-
-}// end CLASS
+  
+//DELETE
+  @Operation(
+      summary = "Deletes a department",
+      description = "Delete a department given a required department id",
+      responses = {
+          @ApiResponse(
+              responseCode = "200", 
+              description = "A department is deleted.", 
+              content = @Content(
+                  mediaType = "application/json", 
+              schema = @Schema(implementation = Department.class))),
+          @ApiResponse(
+              responseCode = "400", 
+              description = "The request parameters are invalid.", 
+              content = @Content(
+                  mediaType = "application/json")),
+          @ApiResponse(
+              responseCode = "404", 
+              description = "No departments were found with the input criteria.", 
+              content = @Content(
+                  mediaType = "application/json")),
+          @ApiResponse(
+              responseCode = "500", 
+              description = "An unplanned error occurred.", 
+              content = @Content(
+                  mediaType = "application/json"))
+      },
+      parameters = {
+          @Parameter(
+              name = "departmentId", 
+              allowEmptyValue = false, 
+              required = false, 
+              description = "The department ID (i.e., 'HR')") 
+      }
+  )
+   @DeleteMapping
+   @ResponseStatus(code = HttpStatus.OK)
+   Optional<Department> deleteDepartment(
+       @RequestParam(required = false)
+       String departmentId);
+   
+   //@formatter:on
+  
+ }

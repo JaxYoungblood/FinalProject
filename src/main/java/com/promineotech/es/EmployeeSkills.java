@@ -1,4 +1,4 @@
-package com.promineotech.es.application;
+package com.promineotech.es;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,10 +9,10 @@ public class EmployeeSkills {
 
   public static void main(String[] args) {
     SpringApplication.run(EmployeeSkills.class, args);
-  }// end METHOD main
+  }
 
 
-}// end CLASS
+}
 
 
 

@@ -1,9 +1,10 @@
 package com.promineotech.es.service;
 
+import java.util.List;
 import com.promineotech.es.entity.EmployeeSkill;
 
 public interface EmployeeSkillService {
   
-  EmployeeSkill getEmployeeSkill(String employee_ID, String skill_ID);
+  List<EmployeeSkill> getEmployeeSkill(String employeeId, int skillId);
 
 }

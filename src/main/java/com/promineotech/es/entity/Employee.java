@@ -7,9 +7,9 @@ import lombok.Data;
 @Builder
 
 public class Employee {
-  private String employee_ID;
-  private String department_ID;
-  private String first_name;
-  private String last_name;
+  private String employeeId;
+  private String departmentId;
+  private String firstName;
+  private String lastName;
   private String phone;
 }

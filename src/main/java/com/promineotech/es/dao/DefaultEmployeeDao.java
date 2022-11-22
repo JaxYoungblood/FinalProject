@@ -1,6 +1,5 @@
 package com.promineotech.es.dao;
 
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -9,131 +8,147 @@ import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 import com.promineotech.es.entity.Employee;
-import com.promineotech.es.entity.InputEmployee;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Component
+@Slf4j
 public class DefaultEmployeeDao implements EmployeeDao {
+  
   @Autowired
   private NamedParameterJdbcTemplate jdbcTemplate;
 
-/*  public Optional<Employee> get(String employee_ID) {
-    String sql = "SELECT employee_ID, department_ID, first_name, last_name, phone " + "FROM employee "+ "WHERE employee_ID = :employee_ID;";
-    MapSqlParameterSource parameters = new MapSqlParameterSource();
-    parameters.addValue("employee_ID", employee_ID);
-    List<Employee> employee = provider.query(sql, parameters, (rs, rowNum) -> {
-      return new Employee(rs.getString("employee_ID"), rs.getString("department_ID"), rs.getString("first_name"),rs.getString("last_name"), rs.getString("phone"));
-    });
-    if (employee.isEmpty()) {
-      return Optional.empty();
-    } // end IF
-    return Optional.of(employee.get(0));
-  }// end GET                               */
-
+  
+//READ
   @Override
-  public List<Employee> get(String employee_ID) {
-        String sql = "SELECT employee_ID, department_ID, first_name, last_name, phone " 
+  public List<Employee> getEmployee(String employeeId) {
+    log.info("DAO: employee_ID={}", employeeId);
+            //@formatter:off
+        String sql = ""
+            + "SELECT employee_ID, department_ID, first_name, last_name, phone " 
             + "FROM employee "
             + "WHERE employee_ID = :employee_ID;";
-    Map<String, Object> params = new HashMap<>();
-    params.put("employee_ID", employee_ID.toString());
+            //@formatter:on
 
-    return jdbcTemplate.query(sql, new RowMapper<Employee>() {
+    Map<String, Object> params = new HashMap<>();
+    params.put("employee_ID", employeeId);
+
+    return jdbcTemplate.query(sql, params, new RowMapper<>() {
+      
       @Override
       public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
-        // @formatter:off
+            // @formatter:off
         return Employee.builder()
-            .employee_ID(new String(rs.getString("employee_ID")))
-            .department_ID(new String(rs.getString("department_ID")))
-            .first_name(new String(rs.getString("first_name")))
-            .last_name(new String(rs.getString("last_name")))
+            .employeeId(new String(rs.getString("employee_ID")))
+            .departmentId(new String(rs.getString("department_ID")))
+            .firstName(new String(rs.getString("first_name")))
+            .lastName(new String(rs.getString("last_name")))
             .phone(new String(rs.getString("phone")))
             .build();
-        // @formatter:on
-      }//end MAPROW
-    });//end QUERY
-  }// end LIST get
+            // @formatter:on
+      }});
+  }
  
   
-  public List<Employee> create(InputEmployee input) {
-    if ((input == null) || (!input.isValid())) {
-      return null;
-    } // end IF
-    String sql = "INSERT INTO customers (customer_pk, first_name, last_name, phone) "
-        + "Values (:customer_pk, :first_name, :last_name, :phone);";
+//CREATE
+  @Override
+  public Optional<Employee> createEmployee(String employeeId, String departmentId, String firstName, String lastName, String phone) {
+    log.info("DAO: employee_ID={}, departmentId={}, firstName={}, lastName={}, phone={}", employeeId, departmentId, firstName, lastName, phone);
+        //@formatter:off
+    String sql = ""
+        + "INSERT INTO employee "
+        + "(employee_ID, department_ID, first_name, last_name, phone"
+        + ") VALUES ("
+        + ":employee_ID, :department_ID, :first_name, :last_name, :phone);";
+        //@formatter:on
 
-    MapSqlParameterSource parameters = new MapSqlParameterSource();
-    String department_ID = input.getDepartmentID();
-    String first_name = input.getFirstName();
-    String last_name = input.getLastName();
-    String phone = input.getPhoneNumber();
-//How do I get just first name initial??
-    String employee_ID = last_name + "_" + first_name;
-    parameters.addValue("employee_ID", employee_ID);
-    parameters.addValue("department_ID", department_ID);
-    parameters.addValue("first_name", first_name);
-    parameters.addValue("last_name", last_name);
-    parameters.addValue("phone", phone);
+    Map<String, Object> params = new HashMap<>();
+    params.put("employee_ID", employeeId);
+    params.put("department_ID", departmentId);
+    params.put("first_name", firstName); 
+    params.put("last_name", lastName); 
+    params.put("phone", phone); 
 
-    int rows = jdbcTemplate.update(sql, parameters);
-    if (rows > 0) {
-      return get(employee_ID);
-    } // end IF
-    return null;
-  }// end CREATE
+    jdbcTemplate.update(sql, params);
+    
+    return Optional.ofNullable(Employee
+        .builder()
+        .employeeId(employeeId)
+        .departmentId(departmentId)
+        .firstName(firstName)
+        .lastName(lastName)
+        .phone(phone)
+        .build());
+  }
+
+  
+//UPDATE
+  @Override
+  public Optional<Employee> updateEmployee(
+      String employeeId, String departmentId, String firstName, String lastName, String phone, 
+      String newDepartmentId, String newFirstName, String newLastName, String newPhone) {
+    
+    log.info("DAO: employee_ID={}, departmentId={}, firstName={}, lastName={}, phone={}, "
+        + "newDepartmentId={}, newFirstName={}, newLastName={}, newPhone={}", 
+          employeeId, departmentId, firstName, lastName, phone, newDepartmentId, newFirstName, newLastName, newPhone);
+        //@formatter:off
+    
+    String sql = ""
+        + "UPDATE employee SET phone = :new_phone, "
+        + "first_name = :new_first_name, "
+        + "last_name = :new_last_name, "
+        + "department_ID = :new_department_ID "
+        + "WHERE employee_ID = :employee_ID AND "
+        + "first_name = :first_name AND "
+        + "last_name = :last_name";
+        //@formatter:on
+
+    Map<String, Object> params = new HashMap<>();
+    params.put("employee_ID", employeeId);
+    params.put("department_ID", departmentId);
+    params.put("first_name", firstName); 
+    params.put("last_name", lastName); 
+    params.put("phone", phone);  
+    params.put("new_department_ID", newDepartmentId);
+    params.put("new_first_name", newFirstName); 
+    params.put("new_last_name", newLastName); 
+    params.put("new_phone", newPhone);  
+    
+    jdbcTemplate.update(sql, params);
+    
+    return Optional.ofNullable(Employee
+        .builder()
+        .employeeId(employeeId)
+        .departmentId(newDepartmentId)
+        .firstName(newFirstName)
+        .lastName(newLastName)
+        .phone(newPhone)
+        .build());
+  }
 
 
-  // @Override (Error occurred below requesting me to remove OVERRIDE)
-  public List<Employee> update(InputEmployee input) {
-    if ((input == null) || (!input.isValid())) {
-      return null;
-    }
-    String sql = "UPDATE employee SET phone = :phone WHERE employee_ID = :employee_ID; ";
+//DELETE
+  @Override
+  public Optional<Employee> deleteEmployee(String employeeId) {
+          //@formatter:off
+      String sql = ""
+          + "DELETE FROM employee "
+          + "WHERE employee_ID = :employee_ID";
+          //@formatter:on
 
-    MapSqlParameterSource parameters = new MapSqlParameterSource();
-    String department_ID = input.getDepartmentID();
-    String first_name = input.getFirstName();
-    String last_name = input.getLastName();
-    String phone = input.getPhoneNumber();
-    String employee_ID = last_name + "_" + first_name;
-    parameters.addValue("phone", phone);
-    parameters.addValue("employee_ID", employee_ID);
-    parameters.addValue("department_ID", department_ID);
-    parameters.addValue("first_name", first_name);
-    parameters.addValue("last_name", last_name);
+      Map<String, Object> params = new HashMap<>();
+      params.put("employee_ID", employeeId);
 
-    int rows = jdbcTemplate.update(sql, parameters);
-    if (rows > 0) {
-      return get(employee_ID);
-    } // end IF
-    return null;
-  }// end UPDATE
+      jdbcTemplate.update(sql, params);
 
+      return Optional.ofNullable(Employee
+          .builder()
+          .employeeId(employeeId)
+          .build());
+      }
 
-  // @Override (Error occurred below requesting me to remove OVERRIDE)
-  public List<Employee> delete(String employee_ID) {
-    if ((employee_ID == null) || (employee_ID.isEmpty())) {
-      return null;
-    } // end IF
-
-    List<Employee> existing = get(employee_ID);
-    if (existing.isPresent()) {
-      String sql = 
-          "DELETE FROM employee WHERE employee_ID = :employee_ID";
-      MapSqlParameterSource parameters = new MapSqlParameterSource();
-      parameters.addValue("employee_ID", employee_ID);
-
-      int rows = jdbcTemplate.update(sql, parameters);
-      if (rows > 0) {
-        return existing;
-      } // end IF 2
-    } // end IF 1
-    return null;
-  }// end DELETE
-
-}// end CLASS
+}
 

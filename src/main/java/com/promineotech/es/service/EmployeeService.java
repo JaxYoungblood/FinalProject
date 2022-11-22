@@ -1,17 +1,18 @@
 package com.promineotech.es.service;
 
+import java.util.List;
+import java.util.Optional;
 import com.promineotech.es.entity.Employee;
-import com.promineotech.es.entity.InputEmployee;
 
 
 public interface EmployeeService {
   
-  Employee getEmployee(String employee_ID);
+  List<Employee> getEmployee(String employeeId);
 
-  Employee createEmployee(InputEmployee input);
+  Optional<Employee> createEmployee(String employeeId, String departmentId, String firstName, String lastName, String phone);
 
-  Employee updateEmployee(InputEmployee input);
+  Optional<Employee> updateEmployee(String employeeId,String departmentId, String firstName, String lastName, String phone, String newDepartmentId, String newFirstName, String newLastName, String newPhone);
 
-  Employee deleteEmployee(String employee_ID);
+  Optional<Employee> deleteEmployee(String employeeId);
 
-}// end CLASS
+}
