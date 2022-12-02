@@ -17,8 +17,7 @@ public class DefaultEmployeeController implements EmployeeController {
   private EmployeeService service;
 
 
-
-  // READ
+//READ
   @Override
   public List<Employee> getEmployee(String employeeId) {
     log.info("employee_ID={}", employeeId);
@@ -27,7 +26,7 @@ public class DefaultEmployeeController implements EmployeeController {
   }
 
 
-  // CREATE
+//CREATE
   @Override
   public Optional<Employee> createEmployee(String employeeId, String departmentId, String firstName, String lastName, String phone) {
     log.info("employee_ID={}, department_ID={}, first_name={}, last_name={}, phone={}", employeeId, departmentId, firstName, lastName, phone);
@@ -36,9 +35,10 @@ public class DefaultEmployeeController implements EmployeeController {
   }
 
 
-  // UPDATE
+//UPDATE
   @Override
-  public Optional<Employee> updateEmployee(String employeeId, String departmentId, String firstName, String lastName, String phone, String newDepartmentId, String newFirstName, String newLastName, String newPhone) {
+  public Optional<Employee> updateEmployee(String employeeId, 
+      String departmentId, String firstName, String lastName, String phone, String newDepartmentId, String newFirstName, String newLastName, String newPhone) {
     log.info("The updateEmployee method was called with "
         + "employeeId={}, departmentId={}, firstName={}, lastName={}, phone={}, " 
         + "newDepartmentId={}, newFirstName={}, newLastName={}, newPhone={}", employeeId, departmentId, firstName, lastName, phone, newDepartmentId, newFirstName, newLastName, newPhone);
@@ -47,7 +47,7 @@ public class DefaultEmployeeController implements EmployeeController {
   }
 
 
-  // DELETE
+//DELETE
   @Override
   public Optional<Employee> deleteEmployee(String employeeId) {
     log.info("employee_ID={}", employeeId);

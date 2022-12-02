@@ -1,6 +1,5 @@
 package com.promineotech.es.controller;
 
-import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,11 +15,13 @@ public class DefaultDepartmentController implements DepartmentController {
   @Autowired
   private DepartmentService service;
 
-  //READ
-  public List<Department> getDepartment(String departmentId) {
-    log.info("department_ID={}", departmentId); 
+  
+//CREATE
+  @Override
+  public Optional<Department> createDepartment(String departmentId, String description) {
+    log.info("departmentId={}, description={}", departmentId, description); 
     
-    return service.getDepartment(departmentId); 
+    return service.createDepartment(departmentId, description); 
   }
   
 

@@ -8,24 +8,36 @@ import com.promineotech.es.entity.Skill;
 import com.promineotech.es.service.SkillService;
 import lombok.extern.slf4j.Slf4j;
 
+
 @RestController
 @Slf4j
-public class DefaultSkillController {
+
+public class DefaultSkillController implements SkillController{
   
   @Autowired
   private SkillService service;
 
   
 //READ
-  //@Override
+  @Override
   public List<Skill> getSkill(int skillId) {
     log.info("skillId={}", skillId); 
     
     return service.getSkill(skillId); 
   }
 
+  
+//CREATE
+  @Override
+  public Optional<Skill> createSkill(int skillId, String description) {
+    log.info("skill_ID={}, description={}", skillId, description);
+
+    return service.createSkill(skillId, description);
+  }
+  
+  
 //DELETE
-  //@Override
+  @Override
   public Optional<Skill> deleteSkill(int skillId) {
     log.info("skillId={}", skillId);
    

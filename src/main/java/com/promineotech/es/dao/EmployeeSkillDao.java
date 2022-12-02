@@ -5,6 +5,6 @@ import com.promineotech.es.entity.EmployeeSkill;
 
 public interface EmployeeSkillDao {
 
-  List<EmployeeSkill> getEmployeeSkill(String employeeId, int skillId);
+  List<EmployeeSkill> getEmployeeSkill(String employeeId);
 
 }

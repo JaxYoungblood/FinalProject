@@ -1,11 +1,12 @@
 package com.promineotech.es.controller;
 
-import java.util.List;
+//import java.util.List;
 import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
+//import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -28,16 +29,16 @@ servers = {@Server(url = "http://localhost:8080", description = "Local server.")
 
 public interface DepartmentController {
 //@formatter:off
+
   
-  
-  //READ
+//CREATE
   @Operation(
-      summary = "Returns a list of departments",
-      description = "Returns a list of departments given a required department id",
+      summary = "Creates a department",
+      description = "Create a new department using a required department ID and description",
       responses = {
           @ApiResponse(
               responseCode = "200", 
-              description = "A list of departments is returned.", 
+              description = "A new department was created!", 
               content = @Content(
                   mediaType = "application/json", 
               schema = @Schema(implementation = Department.class))),
@@ -48,7 +49,7 @@ public interface DepartmentController {
                   mediaType = "application/json")),
           @ApiResponse(
               responseCode = "404", 
-              description = "No departments were found with the input criteria.", 
+              description = "Unable to create new department with the input criteria.", 
               content = @Content(
                   mediaType = "application/json")),
           @ApiResponse(
@@ -59,19 +60,27 @@ public interface DepartmentController {
       },
       parameters = {
           @Parameter(
-              name = "departmentId",
+              name = "departmentId", 
+              allowEmptyValue = false, 
+              required = false, 
+              description = "The department ID (i.e., 'HR')"), 
+          @Parameter(
+              name = "description",
               allowEmptyValue = false,
               required = false,
-              description = "The department ID (i.e., 'HR')") 
-     }
+              description = "The department description (i.e., 'Human Resources')")
+      }
   )
-  @GetMapping
-  @ResponseStatus(code = HttpStatus.OK)
-  List<Department> getDepartment( 
-      @RequestParam(required = false)
-      String departmentId);
 
+  @PostMapping
+  @ResponseStatus(code = HttpStatus.CREATED)
+  Optional<Department> createDepartment(
+     @RequestParam(required = false) 
+     String departmentId,
+     @RequestParam(required = false)
+     String description);  
   
+     
 //DELETE
   @Operation(
       summary = "Deletes a department",

@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
+
 public class Department {
   private String departmentId;
   private String description;

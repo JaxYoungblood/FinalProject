@@ -26,6 +26,7 @@ servers = {@Server(url = "http://localhost:8080", description = "Local server.")
 public interface EmployeeSkillController {
 //@formatter:off
   
+  
 //READ 
   @Operation(
       summary = "Returns a list of employee skills",
@@ -55,10 +56,10 @@ public interface EmployeeSkillController {
       },
       parameters = {
           @Parameter(
-              name = "employeeID", 
+              name = "employeeId", 
               allowEmptyValue = false, 
               required = false, 
-              description = "The employee ID (i.e., 'SMITH_JOHN')"),  
+              description = "The employee ID (Last name + _ + First name, i.e. 'Smith_John')")
      }
   )
   
@@ -66,7 +67,7 @@ public interface EmployeeSkillController {
   @ResponseStatus(code = HttpStatus.OK)
   List<EmployeeSkill> getEmployeeSkill(
       @RequestParam(required = false) 
-      String employeeID);
- 
+      String employeeId);
+
   
 }

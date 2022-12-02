@@ -8,6 +8,7 @@ import com.promineotech.es.dao.EmployeeSkillDao;
 import com.promineotech.es.entity.EmployeeSkill;
 import lombok.extern.slf4j.Slf4j;
 
+
 @Service
 @Slf4j
 public class DefaultEmployeeSkillService implements EmployeeSkillService {
@@ -16,12 +17,13 @@ public class DefaultEmployeeSkillService implements EmployeeSkillService {
   private EmployeeSkillDao employeeSkillDoa;
   
 
+//READ
   @Transactional(readOnly = true)
   @Override
-  public List<EmployeeSkill> getEmployeeSkill(String employeeId, int skillId) {
-    log.info("The getEmployeeSkill method was called with employeeId={} and skillId={}", employeeId, skillId);
+  public List<EmployeeSkill> getEmployeeSkill(String employeeId) {
+    log.info("The getEmployeeSkill method was called with employeeId={}", employeeId);
     
-    return employeeSkillDoa.getEmployeeSkill(employeeId, skillId);
+    return employeeSkillDoa.getEmployeeSkill(employeeId);
   }
 
 }

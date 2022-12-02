@@ -10,17 +10,18 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @Slf4j
 
-public class DefaultEmployeeSkillController {
+public class DefaultEmployeeSkillController implements EmployeeSkillController{
+  
   @Autowired
   private EmployeeSkillService service;
   
   
 //READ
-  //@Override
-  public List<EmployeeSkill> getEmployeeSkill(String employeeId, int skillId) {
+  @Override
+  public List<EmployeeSkill> getEmployeeSkill(String employeeId) {
     log.info("employeeId={}", employeeId); 
     
-    return service.getEmployeeSkill(employeeId, skillId); 
+    return service.getEmployeeSkill(employeeId); 
   }
 
 }

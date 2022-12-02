@@ -30,6 +30,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 public interface EmployeeController {
 //@formatter:off
   
+  
 //READ
   @Operation(
       summary = "Returns a list of employee details",

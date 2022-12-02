@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import com.promineotech.es.entity.EmployeeSkill;
 import lombok.extern.slf4j.Slf4j;
 
+
 @Component
 @Slf4j
 public class DefaultEmployeeSkillDao implements EmployeeSkillDao {
@@ -22,18 +23,19 @@ public class DefaultEmployeeSkillDao implements EmployeeSkillDao {
   
 //READ
   @Override
-  public List<EmployeeSkill> getEmployeeSkill(String employeeId, int skillId) {
-    log.info("DAO: employeeId={}, skillId={}", employeeId, skillId);
-    
+  public List<EmployeeSkill> getEmployeeSkill(String employeeId) {
+    log.info("DAO: employeeId={}", employeeId);
+        //@formatter:off
     String sql = ""
         + "SELECT employee_ID, skill_ID " 
         + "FROM employee_skill "
         + "WHERE employee_ID = :employee_ID;";
+        //@formatter:on
+
     Map<String, Object> params = new HashMap<>();
     params.put("employee_ID", employeeId);
-    params.put("skill_ID", skillId);
 
-    return jdbcTemplate.query(sql, new RowMapper<EmployeeSkill>() {
+    return jdbcTemplate.query(sql, params, new RowMapper<EmployeeSkill>() {
       
       @Override
       public EmployeeSkill mapRow(ResultSet rs, int rowNum) throws SQLException {

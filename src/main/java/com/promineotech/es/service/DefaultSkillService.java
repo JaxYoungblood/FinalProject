@@ -18,6 +18,7 @@ public class DefaultSkillService implements SkillService {
   private SkillDao skillDao;
 
   
+//READ
   @Transactional(readOnly = true)
   @Override
   public List<Skill> getSkill(int skillId) {
@@ -27,6 +28,16 @@ public class DefaultSkillService implements SkillService {
   }
 
 
+//CREATE
+  @Override
+  public Optional<Skill> createSkill(int skillId, String description) {
+    log.info("The createSkill method was called with skillId={}, description={}", skillId, description); 
+
+    return skillDao.createSkill(skillId, description);
+  }
+  
+  
+//DELETE
   @Override
   public Optional<Skill> deleteSkill(int skillId) {
    

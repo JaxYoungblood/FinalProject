@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import com.promineotech.es.entity.Skill;
 import lombok.extern.slf4j.Slf4j;
 
+
 @Component
 @Slf4j
 public class DefaultSkillDao implements SkillDao {
@@ -48,13 +49,38 @@ public class DefaultSkillDao implements SkillDao {
   } 
 
   
+//CREATE
+  @Override
+  public Optional<Skill> createSkill(int skillId, String description) {
+    log.info("DAO: skill_ID={}, description={}", skillId, description);
+        //@formatter:off
+    String sql = ""
+        + "INSERT INTO skill "
+        + "(skill_ID, description"
+        + ") VALUES ("
+        + ":skill_ID, :description);";
+        //@formatter:on
+
+    Map<String, Object> params = new HashMap<>();
+    params.put("skill_ID", skillId);
+    params.put("description", description); 
+
+    jdbcTemplate.update(sql, params);
+    
+    return Optional.ofNullable(Skill
+        .builder()
+        .skillId(skillId)
+        .description(description)
+        .build());
+  }
+
+  
 //DELETE
   @Override
   public Optional<Skill> deleteSkill(int skillId) {
       String sql = ""
-          + "DELETE employee_skill.*, skill.* " 
-          + "FROM employee_skill, skill "
-          + "WHERE employee_skill.skill_ID = :skill_ID AND skill.skill_ID = :skill_ID;";
+          + "DELETE FROM skill "
+          + "WHERE skill_ID = :skill_ID;";
 
       Map<String, Object> params = new HashMap<>();
       params.put("skill_ID", skillId);
